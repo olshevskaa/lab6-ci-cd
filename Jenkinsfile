@@ -10,22 +10,19 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
-
         stage('Test') {
             steps {
-                sh 'npm test || echo "No tests yet"'
+                bat 'npm test || echo No tests yet'
             }
         }
-
         stage('Package') {
             steps {
-                sh 'zip -r app.zip *'
+                bat 'powershell Compress-Archive -Path * -DestinationPath app.zip -Force'
             }
         }
-
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
