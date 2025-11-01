@@ -1,13 +1,6 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/olshevskaa/lab6-ci-cd'
-            }
-        }
-
         stage('Build') {
             steps {
                 bat 'npm install'
@@ -15,7 +8,12 @@ pipeline {
         }
         stage('Test') {
             steps {
-                bat 'npm test || echo No tests yet'
+                script {
+                    def testResult = bat(script: 'npm test', returnStatus: true)
+                    if (testResult != 0) {
+                        echo 'No tests yet or tests failed, continuing...'
+                    }
+                }
             }
         }
         stage('Package') {
